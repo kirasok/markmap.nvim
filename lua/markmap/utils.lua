@@ -16,9 +16,12 @@ local is_windows = vim.uv.os_uname().sysname == "Windows_NT"
 ---@return number job pid of the job, so we can stop it later.
 M.jobstart = function(cmd, arguments, opts)
   if is_windows then
-    return opts and vim.fn.jobstart({ cmd, unpack(arguments) }, opts) or vim.fn.jobstart({ cmd, unpack(arguments) })
+    return opts and vim.fn.jobstart({ cmd, unpack(arguments) }, opts)
+      or vim.fn.jobstart({ cmd, unpack(arguments) })
   else
-    return opts and vim.fn.jobstart(cmd .. " " .. table.concat(arguments, " "), opts) or vim.fn.jobstart(cmd .. " " .. table.concat(arguments, " "))
+    return opts
+        and vim.fn.jobstart(cmd .. " " .. table.concat(arguments, " "), opts)
+      or vim.fn.jobstart(cmd .. " " .. table.concat(arguments, " "))
   end
 end
 
@@ -29,6 +32,7 @@ M.reset_arguments = function()
   local config = vim.g.markmap_config
 
   local arguments = {}
+  if config.offline then table.insert(arguments, config.offline) end
   if config.html_output ~= "" then -- if html_output is "", don't pass the parameter
     table.insert(arguments, "-o")
     table.insert(arguments, '"' .. config.html_output .. '"')

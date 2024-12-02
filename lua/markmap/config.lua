@@ -12,6 +12,7 @@ M.set = function(opts)
   M.html_output = opts.html_output or nil
   M.hide_toolbar = opts.hide_toolbar or false
   M.grace_period = opts.grace_period or 3600000 -- 60min
+  M.offline = opts.offline or true
 
   -- Set defaults: M.html_output
   if M.html_output == nil then
@@ -29,6 +30,12 @@ M.set = function(opts)
     M.hide_toolbar = "--no-toolbar"
   else
     M.hide_toolbar = nil
+  end
+
+  if M.offline then
+    M.offline = "--offline"
+  else
+    M.offline = nil
   end
 
   -- Set defaults: M.markmap_cmd
